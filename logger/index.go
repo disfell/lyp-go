@@ -7,9 +7,9 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-var lg *zap.Logger
+var zL *zap.Logger
 
-func InitLogger() {
+func init() {
 	// 创建文件写入器
 	file, err := os.OpenFile("app.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
@@ -30,7 +30,7 @@ func InitLogger() {
 		EncodeCaller:   zapcore.ShortCallerEncoder,
 	}
 
-	lg = zap.New(zapcore.NewCore(
+	zL = zap.New(zapcore.NewCore(
 		// zapcore.NewJSONEncoder(encoderConfig), // JOSN 格式输出日志
 		zapcore.NewConsoleEncoder(encoderConfig), // 常规的控制台输出格式
 		// zapcore.AddSync(os.Stdout), // 输出到控制台
@@ -40,5 +40,25 @@ func InitLogger() {
 }
 
 func GetLogger() *zap.Logger {
-	return lg
+	return zL
+}
+
+func Sync() {
+	GetLogger().Sync()
+}
+
+func Infof(template string, args ...interface{}) {
+	zL.Sugar().Infof(template, args...)
+}
+
+func Debugf(template string, args ...interface{}) {
+	zL.Sugar().Debugf(template, args...)
+}
+
+func Warnf(template string, args ...interface{}) {
+	zL.Sugar().Warnf(template, args...)
+}
+
+func Errorf(template string, args ...interface{}) {
+	zL.Sugar().Errorf(template, args...)
 }

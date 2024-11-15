@@ -3,7 +3,7 @@ package middleware
 import (
 	"fmt"
 	"lyp-go/logger"
-	"lyp-go/model"
+	"lyp-go/resp"
 	"net/http"
 	"runtime"
 	"time"
@@ -13,73 +13,59 @@ import (
 )
 
 func LoadMidde(c *gin.Engine) {
-	// 手动添加Logger中间件
-	c.Use(zapLog())
-	c.Use(respHeader())
+	c.Use(reqt2resp())
 	c.Use(customRecovery())
 }
 
-func safeHeader(ctx *gin.Context) {
-	ctx.Header("X-Frame-Options", "DENY")
-	ctx.Header("Content-Security-Policy", "default-src 'self'; connect-src *; font-src *; script-src-elem * 'unsafe-inline'; img-src * data:; style-src * 'unsafe-inline';")
-	ctx.Header("X-XSS-Protection", "1; mode=block")
-	ctx.Header("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
-	ctx.Header("Referrer-Policy", "strict-origin")
-	ctx.Header("X-Content-Type-Options", "nosniff")
-	ctx.Header("Permissions-Policy", "geolocation=(),midi=(),sync-xhr=(),microphone=(),camera=(),magnetometer=(),gyroscope=(),fullscreen=(self),payment=()")
-}
+func reqt2resp() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		start := time.Now()
 
-func respHeader() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		safeHeader(ctx)
-		ctx.Next()
+		c.Header("X-Frame-Options", "DENY")
+		c.Header("Content-Security-Policy", "default-src 'self'; connect-src *; font-src *; script-src-elem * 'unsafe-inline'; img-src * data:; style-src * 'unsafe-inline';")
+		c.Header("X-XSS-Protection", "1; mode=block")
+		c.Header("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
+		c.Header("Referrer-Policy", "strict-origin")
+		c.Header("X-Content-Type-Options", "nosniff")
+		c.Header("Permissions-Policy", "geolocation=(),midi=(),sync-xhr=(),microphone=(),camera=(),magnetometer=(),gyroscope=(),fullscreen=(self),payment=()")
+
+		if logger.GetLogger() != nil {
+			c.Next()
+			logger.GetLogger().Info("handled request",
+				zap.String("method", c.Request.Method),
+				zap.String("path", c.Request.URL.Path),
+				zap.Int("status", c.Writer.Status()),
+				zap.Duration("duration", time.Since(start)),
+			)
+		} else {
+			c.Next()
+		}
 	}
 }
 
 // 自定义的Recovery中间件
 func customRecovery() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
+	return func(c *gin.Context) {
 		defer func() {
 			if r := recover(); r != nil {
 				// 获取堆栈信息
 				stack := make([]byte, 1024*8)
 				length := runtime.Stack(stack, false)
 
-				// 打印堆栈信息（可选）
-				logger.GetLogger().Error(fmt.Sprintf("Panic info is: [%v], stack is: [%s]\n", r, stack[:length]))
-
 				// 如果是自定义异常，特殊处理
-				if lErr, ok := r.(*model.LError); ok {
+				if lErr, ok := r.(*resp.LError); ok {
+					logger.Errorf("Panic info is: %s, stack is: \n%s", resp.Err2Str(lErr), stack[:length])
 					// 返回JSON格式的错误响应
-					ctx.JSON(http.StatusInternalServerError, model.LErr2Json(lErr))
+					c.JSON(http.StatusInternalServerError, lErr)
 				} else {
+					logger.Errorf("Panic info is: %s, stack is: \n%s", r, stack[:length])
 					// 返回JSON格式的错误响应
-					ctx.JSON(http.StatusInternalServerError, model.Json(
-						-1,
-						fmt.Sprintf("服务器内部错误: %v", r),
-						nil,
-					))
+					c.JSON(http.StatusInternalServerError, resp.Err(300, fmt.Sprintf("服务器内部错误: %+v", r), nil))
 				}
 
-				ctx.Abort() // 中止请求处理
+				c.Abort() // 中止请求处理
 			}
 		}()
-		ctx.Next() // 执行下一个中间件或处理函数
-	}
-}
-
-func zapLog() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		if logger.GetLogger() != nil {
-			start := time.Now()
-			ctx.Next()
-			log := logger.GetLogger()
-			log.Info("handled request",
-				zap.String("method", ctx.Request.Method),
-				zap.String("path", ctx.Request.URL.Path),
-				zap.Int("status", ctx.Writer.Status()),
-				zap.Duration("duration", time.Since(start)),
-			)
-		}
+		c.Next() // 执行下一个中间件或处理函数
 	}
 }

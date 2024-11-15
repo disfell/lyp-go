@@ -1,42 +1,41 @@
 package handler
 
 import (
-	"fmt"
+	"errors"
 	"lyp-go/db"
 	"lyp-go/model"
+	"lyp-go/resp"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func HelloHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, model.JsonSuc("你好!", nil))
-}
-
-func TestError(c *gin.Context) {
-	action := c.Query("action")
-	if action == "1" {
-		panic(model.NewErr(300, "测试错误", map[string]string{"field1": "val1", "field2": "val2"}))
-	} else {
-		arr := []int{1, 2, 3}
-		fmt.Println(arr[5])
-	}
+	c.JSON(http.StatusOK, resp.Suc("Hello Wrold", nil))
 }
 
 func TestSqlite(c *gin.Context) {
 	action := c.Query("action")
 	if action == "0" {
 		var article model.Article
-		db.DB.First(&article, c.Query("id"))
-		c.JSON(http.StatusOK, model.JsonSuc("suc!", article))
-	}
-	if action == "1" {
+		err := db.DB.First(&article, c.Query("id")).Error
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			panic("数据不存在，id=" + c.Query("id"))
+		}
+		c.JSON(http.StatusOK, resp.Suc("Hello Wrold", article))
+	} else if action == "1" {
 		var article model.Article
 		if err := c.ShouldBindJSON(&article); err != nil {
 			panic(err.Error())
 		}
 		db.DB.Create(&article)
-		fmt.Println(article)
-		c.JSON(http.StatusOK, model.JsonSuc("suc!", article))
+		c.JSON(http.StatusOK, resp.Suc("Hello Wrold", article))
+	} else if action == "2" {
+		var article model.Article
+		db.DB.Delete(&article, "id = ?", c.Query("id"))
+		c.JSON(http.StatusOK, resp.Suc("删除成功", nil))
+	} else {
+		panic(resp.Err(300, "不支持的action类型: "+action, action))
 	}
 }

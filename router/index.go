@@ -6,9 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter(ctx *gin.Engine) {
+func InitRouter(c *gin.Engine) {
 	// 注册路径
-	ctx.GET("/", handler.HelloHandler)
-	ctx.GET("/testError", handler.TestError)
-	ctx.POST("/testSqlite", handler.TestSqlite)
+	c.GET("/", handler.HelloHandler)
+	c.POST("/testSqlite", handler.TestSqlite)
 }

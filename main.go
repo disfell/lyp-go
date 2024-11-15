@@ -10,10 +10,8 @@ import (
 )
 
 func main() {
-	// 初始化日志功能
-	logger.InitLogger()
 	// 确保所有日志都写入
-	defer logger.GetLogger().Sync()
+	defer logger.Sync()
 	c := gin.New()
 	// 注册中间件
 	middleware.LoadMidde(c)
