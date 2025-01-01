@@ -8,6 +8,6 @@ import (
 
 func InitRouter(c *gin.Engine) {
 	// 注册路径
-	c.GET("/", handler.HelloHandler)
-	c.POST("/testSqlite", handler.TestSqlite)
+	c.GET("/api", handler.HelloHandler)
+	c.POST("/api/testSqlite", handler.TestSqlite)
 }
