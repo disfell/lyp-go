@@ -1,5 +1,11 @@
 # 说明
 
+## 本地测试
+
+```shell
+go run main.go
+```
+
 ## 配置 Go 开发环境
 
 [传送门](https://learn.microsoft.com/zh-cn/azure/developer/go/configure-visual-studio-code)

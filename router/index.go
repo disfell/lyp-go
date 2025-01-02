@@ -1,13 +1,19 @@
 package router
 
 import (
-	"lyp-go/handler"
-
 	"github.com/gin-gonic/gin"
+	"lyp-go/handler"
 )
 
 func InitRouter(c *gin.Engine) {
-	// 注册路径
-	c.GET("/api", handler.HelloHandler)
-	c.POST("/api/testSqlite", handler.TestSqlite)
+	c.GET("/", handler.HelloHandler)
+	c.POST("/", handler.HelloHandler)
+	c.PUT("/", handler.HelloHandler)
+	c.DELETE("/", handler.HelloHandler)
+
+	// 可公开的路由
+	v1 := c.Group("/api")
+	{
+		v1.GET("/public", handler.ApiHandler)
+	}
 }
