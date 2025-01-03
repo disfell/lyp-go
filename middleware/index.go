@@ -30,10 +30,8 @@ func reqt2resp() gin.HandlerFunc {
 		c.Header("Permissions-Policy", "geolocation=(),midi=(),sync-xhr=(),microphone=(),camera=(),magnetometer=(),gyroscope=(),fullscreen=(self),payment=()")
 
 		// https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
-		if gin.Mode() == gin.ReleaseMode {
-			c.Header("Access-Control-Allow-Origin", "https://lyp.ink")
-			c.Header("Vary", "Origin")
-		}
+		c.Header("Access-Control-Allow-Origin", "https://lyp.ink")
+		c.Header("Vary", "Origin")
 
 		if logger.GetLogger() != nil {
 			c.Next()

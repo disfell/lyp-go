@@ -26,8 +26,6 @@ func Start(c *gin.Engine) {
 	router.InitRouter(c)
 	// 设置静态文件目录
 	c.Static("/static", "./static")
-	gin.SetMode(gin.ReleaseMode)
-	logger.Infof("发布模式=%s", gin.Mode())
 }
 
 func init() {
