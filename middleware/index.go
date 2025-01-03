@@ -3,7 +3,7 @@ package middleware
 import (
 	"fmt"
 	"lyp-go/logger"
-	"lyp-go/model"
+	"lyp-go/resp"
 	"net/http"
 	"runtime"
 	"time"
@@ -29,10 +29,6 @@ func reqt2resp() gin.HandlerFunc {
 		c.Header("X-Content-Type-Options", "nosniff")
 		c.Header("Permissions-Policy", "geolocation=(),midi=(),sync-xhr=(),microphone=(),camera=(),magnetometer=(),gyroscope=(),fullscreen=(self),payment=()")
 
-		// https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
-		c.Header("Access-Control-Allow-Origin", "https://lyp.ink")
-		c.Header("Vary", "Origin")
-
 		if logger.GetLogger() != nil {
 			c.Next()
 			logger.GetLogger().Info("handled request",
@@ -57,14 +53,14 @@ func customRecovery() gin.HandlerFunc {
 				length := runtime.Stack(stack, false)
 
 				// 如果是自定义异常，特殊处理
-				if lErr, ok := r.(*model.LError); ok {
-					logger.Errorf("Panic info is: %s, stack is: \n%s", model.Err2Str(lErr), stack[:length])
+				if lErr, ok := r.(*resp.LError); ok {
+					logger.Errorf("Panic info is: %s, stack is: \n%s", resp.Err2Str(lErr), stack[:length])
 					// 返回JSON格式的错误响应
 					c.JSON(http.StatusInternalServerError, lErr)
 				} else {
 					logger.Errorf("Panic info is: %s, stack is: \n%s", r, stack[:length])
 					// 返回JSON格式的错误响应
-					c.JSON(http.StatusInternalServerError, model.Err(300, fmt.Sprintf("服务器内部错误: %+v", r), nil))
+					c.JSON(http.StatusInternalServerError, resp.Err(300, fmt.Sprintf("服务器内部错误: %+v", r), nil))
 				}
 
 				c.Abort() // 中止请求处理

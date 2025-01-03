@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"lyp-go/logger"
 	"lyp-go/middleware"
 	"lyp-go/router"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 var (

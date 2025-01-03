@@ -1,13 +1,13 @@
-package model
+package resp
 
 import (
 	"fmt"
 )
 
 type LResp struct {
-	Code int    `json:"code"`
-	Msg  string `json:"msg"`
-	Data any    `json:"data"`
+	Code int
+	Msg  string
+	Data any
 }
 
 type LError struct {
@@ -20,11 +20,7 @@ func Err(code int, msg string, data any) *LError {
 	}
 }
 
-func Suc(msg string) *LResp {
-	return &LResp{Code: 0, Msg: msg, Data: nil}
-}
-
-func SucData(msg string, data any) *LResp {
+func Suc(msg string, data any) *LResp {
 	return &LResp{Code: 0, Msg: msg, Data: data}
 }
 

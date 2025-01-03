@@ -16,16 +16,12 @@ var (
 	app *gin.Engine
 )
 
-func Start(c *gin.Engine) {
+func init() {
 	// 确保所有日志都写入
 	defer logger.Sync()
-	c = gin.New()
+	app = gin.New()
 	// 注册中间件
-	middleware.LoadMidde(c)
+	middleware.LoadMidde(app)
 	// 注册路由
-	router.InitRouter(c)
-}
-
-func init() {
-	Start(app)
+	router.InitRouter(app)
 }
