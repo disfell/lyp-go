@@ -21,6 +21,10 @@ func main() {
 	middleware.LoadMidde(app)
 	// 注册路由
 	router.InitRouter(app)
+	// 设置静态文件目录
+	app.Static("/static", "./static")
+	logger.Infof("发布模式=%s", gin.Mode())
+
 	// 启动服务
 	err := http.ListenAndServe(":8180", app)
 	if err != nil {

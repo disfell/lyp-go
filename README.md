@@ -6,9 +6,13 @@
 go run main.go
 ```
 
-## 配置 Go 开发环境
+## gin 框架文档
 
-[传送门](https://learn.microsoft.com/zh-cn/azure/developer/go/configure-visual-studio-code)
+https://gin-gonic.com/zh-cn/docs/examples/
+
+## VsCode & Go
+
+https://learn.microsoft.com/zh-cn/azure/developer/go/configure-visual-studio-code
 
 ## 设置国内镜像
 

@@ -12,8 +12,14 @@ func InitRouter(c *gin.Engine) {
 	c.DELETE("/", handler.HelloHandler)
 
 	// 可公开的路由
-	v1 := c.Group("/api")
+	api := c.Group("/api")
 	{
-		v1.GET("/public", handler.ApiHandler)
+		public := api.Group("/public")
+		{
+			public.GET("/steam", handler.SteamGamesHandler)
+		}
 	}
+
+	// 自定义404页面
+	c.NoRoute(handler.NotFound)
 }

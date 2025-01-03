@@ -16,12 +16,20 @@ var (
 	app *gin.Engine
 )
 
-func init() {
+func Start(c *gin.Engine) {
 	// 确保所有日志都写入
 	defer logger.Sync()
-	app = gin.New()
+	c = gin.New()
 	// 注册中间件
-	middleware.LoadMidde(app)
+	middleware.LoadMidde(c)
 	// 注册路由
-	router.InitRouter(app)
+	router.InitRouter(c)
+	// 设置静态文件目录
+	c.Static("/static", "./static")
+	gin.SetMode(gin.ReleaseMode)
+	logger.Infof("发布模式=%s", gin.Mode())
+}
+
+func init() {
+	Start(app)
 }

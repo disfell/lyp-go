@@ -1,18 +1,14 @@
 package handler
 
 import (
-	"lyp-go/resp"
+	"lyp-go/model"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func HelloHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, resp.Suc("Hello Wrold", nil))
-}
-
-func ApiHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, resp.Suc("api index", nil))
+	c.JSON(http.StatusOK, model.Suc("Hello Wrold"))
 }
 
 //func TestSqlite(c *gin.Context) {
