@@ -11,10 +11,6 @@ func HelloHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, resp.Suc("Hello Wrold", nil))
 }
 
-func ApiHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, resp.Suc("api index", nil))
-}
-
 //func TestSqlite(c *gin.Context) {
 //	action := c.Query("action")
 //	if action == "0" {
