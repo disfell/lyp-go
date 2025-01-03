@@ -24,8 +24,6 @@ func Start(c *gin.Engine) {
 	middleware.LoadMidde(c)
 	// 注册路由
 	router.InitRouter(c)
-	// 设置静态文件目录
-	c.Static("/static", "./static")
 }
 
 func init() {
