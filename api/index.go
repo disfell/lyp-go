@@ -26,4 +26,5 @@ func init() {
 	middleware.LoadMidde(app)
 	// 注册路由
 	router.InitRouter(app)
+	gin.SetMode(gin.ReleaseMode)
 }
