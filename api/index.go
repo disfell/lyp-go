@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"lyp-go/config"
 	"lyp-go/logger"
 	"lyp-go/middleware"
 	"lyp-go/router"
@@ -17,6 +18,7 @@ var (
 )
 
 func init() {
+	config.Init()
 	// 确保所有日志都写入
 	defer logger.Sync()
 	app = gin.New()

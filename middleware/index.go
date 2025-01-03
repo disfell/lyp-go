@@ -28,6 +28,8 @@ func reqt2resp() gin.HandlerFunc {
 		c.Header("Referrer-Policy", "strict-origin")
 		c.Header("X-Content-Type-Options", "nosniff")
 		c.Header("Permissions-Policy", "geolocation=(),midi=(),sync-xhr=(),microphone=(),camera=(),magnetometer=(),gyroscope=(),fullscreen=(self),payment=()")
+		c.Header("Access-Control-Allow-Origin", "https://lyp.ink")
+		c.Header("Vary", "Origin")
 
 		if logger.GetLogger() != nil {
 			c.Next()

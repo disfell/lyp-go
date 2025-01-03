@@ -1,6 +1,7 @@
 package main
 
 import (
+	"lyp-go/config"
 	"lyp-go/logger"
 	"lyp-go/middleware"
 	"lyp-go/router"
@@ -14,6 +15,7 @@ var (
 )
 
 func main() {
+	config.Init()
 	// 确保所有日志都写入
 	defer logger.Sync()
 	app = gin.New()
@@ -22,9 +24,5 @@ func main() {
 	// 注册路由
 	router.InitRouter(app)
 	// 启动服务
-	err := http.ListenAndServe(":8180", app)
-	if err != nil {
-		logger.GetLogger().Error(err.Error())
-		return
-	}
+	_ = http.ListenAndServe(":8180", app)
 }
