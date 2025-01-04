@@ -3,14 +3,17 @@ package config
 import (
 	"github.com/spf13/viper"
 	"lyp-go/logger"
+	"os"
 	"strings"
 )
 
 func init() {
+
+	rootDir, _ := os.Getwd()
 	// 设置配置文件路径和类型
-	viper.SetConfigName("config") // 配置文件名（不带扩展名）
-	viper.SetConfigType("yaml")   // 配置文件类型
-	viper.AddConfigPath(".")      // 配置文件路径
+	viper.SetConfigName("config")                           // 配置文件名（不带扩展名）
+	viper.SetConfigType("yaml")                             // 配置文件类型
+	viper.AddConfigPath(rootDir + string(os.PathSeparator)) // 配置文件路径
 
 	// 读取配置文件
 	err := viper.ReadInConfig()

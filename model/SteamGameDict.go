@@ -10,7 +10,8 @@ import (
 var SteamDict = make(map[string]interface{})
 
 func init() {
-	fileContent, err := os.Open("config/steam.dict.json")
+	rootDir, _ := os.Getwd()
+	fileContent, err := os.Open(rootDir + string(os.PathSeparator) + "config" + string(os.PathSeparator) + "steam.dict.json")
 	if err != nil {
 		return
 	}
