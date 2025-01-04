@@ -3,9 +3,10 @@ package config
 import (
 	"github.com/spf13/viper"
 	"lyp-go/logger"
+	"strings"
 )
 
-func Init() {
+func init() {
 	// 设置配置文件路径和类型
 	viper.SetConfigName("config") // 配置文件名（不带扩展名）
 	viper.SetConfigType("yaml")   // 配置文件类型
@@ -18,4 +19,9 @@ func Init() {
 	}
 	// 自动从环境变量获取配置
 	viper.AutomaticEnv()
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+}
+
+func Take() {
+
 }

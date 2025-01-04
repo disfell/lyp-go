@@ -5,3 +5,5 @@ supabase:
 steam:
   id: 76561199109983986
   token: F2FB2E28329F2E5A123AB2C2564E4C64
+  recentUrl: https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1
+  userStatus: https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/

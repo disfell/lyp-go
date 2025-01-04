@@ -3,7 +3,8 @@ package middleware
 import (
 	"fmt"
 	"lyp-go/logger"
-	"lyp-go/resp"
+	"lyp-go/model"
+	"lyp-go/output"
 	"net/http"
 	"runtime"
 	"time"
@@ -55,19 +56,35 @@ func customRecovery() gin.HandlerFunc {
 				length := runtime.Stack(stack, false)
 
 				// 如果是自定义异常，特殊处理
-				if lErr, ok := r.(*resp.LError); ok {
-					logger.Errorf("Panic info is: %s, stack is: \n%s", resp.Err2Str(lErr), stack[:length])
+				if lErr, ok := r.(*output.LError); ok {
+					logger.Errorf("Panic info is: %s, stack is: \n%s", output.Err2Str(lErr), stack[:length])
 					// 返回JSON格式的错误响应
 					c.JSON(http.StatusInternalServerError, lErr)
 				} else {
 					logger.Errorf("Panic info is: %s, stack is: \n%s", r, stack[:length])
 					// 返回JSON格式的错误响应
-					c.JSON(http.StatusInternalServerError, resp.Err(300, fmt.Sprintf("服务器内部错误: %+v", r), nil))
+					c.JSON(http.StatusInternalServerError, output.Err(model.ErrorCode, fmt.Sprintf("服务器内部错误: %+v", r), nil))
 				}
 
 				c.Abort() // 中止请求处理
 			}
 		}()
 		c.Next() // 执行下一个中间件或处理函数
+	}
+}
+
+func Cache1day() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// 设置 Cache-Control 头，使浏览器缓存该响应 1 天
+		c.Writer.Header().Set("Cache-Control", "public, max-age=86400")
+		c.Next()
+	}
+}
+
+func Cache1min() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// 设置 Cache-Control 头，使浏览器缓存该响应 1 天
+		c.Writer.Header().Set("Cache-Control", "public, max-age=60")
+		c.Next()
 	}
 }

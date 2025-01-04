@@ -18,7 +18,7 @@ var (
 )
 
 func init() {
-	config.Init()
+	config.Take()
 	// 确保所有日志都写入
 	defer logger.Sync()
 	app = gin.New()

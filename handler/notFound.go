@@ -2,10 +2,10 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"lyp-go/resp"
+	"lyp-go/output"
 	"net/http"
 )
 
 func NotFoundHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, resp.Suc("404", nil))
+	c.JSON(http.StatusOK, output.Suc("404", nil))
 }

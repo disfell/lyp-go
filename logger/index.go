@@ -44,11 +44,7 @@ func GetLogger() *zap.Logger {
 }
 
 func Sync() {
-	err := GetLogger().Sync()
-	if err != nil {
-		println(err.Error())
-		return
-	}
+	_ = GetLogger().Sync()
 }
 
 func Infof(template string, args ...interface{}) {
