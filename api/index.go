@@ -18,6 +18,7 @@ var (
 )
 
 func init() {
+	gin.SetMode(gin.ReleaseMode)
 	config.Take()
 	// 确保所有日志都写入
 	defer logger.Sync()
