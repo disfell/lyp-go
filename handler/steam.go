@@ -10,6 +10,7 @@ import (
 	"lyp-go/output"
 	"net/http"
 	"net/url"
+	"strconv"
 	"time"
 )
 
@@ -32,7 +33,7 @@ func SteamHandler(c *gin.Context) {
 			v := game.(map[string]interface{})
 			collection = append(collection, map[string]interface{}{
 				"name":       v["name"].(string),
-				"name_cn":    model.SteamDict[v["name"].(string)],
+				"name_cn":    model.SteamDict[strconv.Itoa(int(v["appid"].(float64)))],
 				"game_id":    v["appid"].(float64),
 				"play_time":  v["playtime_forever"].(float64),
 				"original":   v,
