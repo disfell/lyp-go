@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"github.com/gin-gonic/gin"
 	"os"
 
 	"go.uber.org/zap"
@@ -30,12 +31,17 @@ func init() {
 		EncodeCaller:   zapcore.ShortCallerEncoder,
 	}
 
+	level := zapcore.DebugLevel
+
+	if gin.Mode() == gin.ReleaseMode {
+		level = zapcore.InfoLevel
+	}
 	zL = zap.New(zapcore.NewCore(
 		// zapcore.NewJSONEncoder(encoderConfig), // JOSN 格式输出日志
 		zapcore.NewConsoleEncoder(encoderConfig), // 常规的控制台输出格式
 		zapcore.AddSync(os.Stdout),               // 输出到控制台
 		// zapcore.AddSync(file), // 输出到文件
-		zap.NewAtomicLevelAt(zapcore.DebugLevel),
+		zap.NewAtomicLevelAt(level),
 	))
 }
 
