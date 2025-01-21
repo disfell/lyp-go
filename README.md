@@ -3,7 +3,11 @@
 ## 本地测试
 
 ```shell
-go run main.go
+go run ./cmd/main.go
+```
+
+```shell
+go test -v ./tests/api_test.go
 ```
 
 ## gin 框架文档
