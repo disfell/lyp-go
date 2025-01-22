@@ -13,5 +13,10 @@ func InitRouter(c *gin.Engine) {
 		api.GET("/steam/status", handler.SteamStatus)
 	}
 
+	proxy := c.Group("/proxy")
+	{
+		proxy.Any("/*target", handler.UrlProxyHandler)
+	}
+
 	c.NoRoute(handler.NotFoundHandler)
 }
