@@ -11,6 +11,8 @@ func InitRouter(c *gin.Engine) {
 	{
 		api.POST("/steam/games", handler.SteamHandler)
 		api.GET("/steam/status", handler.SteamStatus)
+
+		api.GET("/github/trending", handler.GitHubTrendingHandler)
 	}
 
 	proxy := c.Group("/proxy")
