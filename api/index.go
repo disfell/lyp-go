@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"lyp-go/config"
+	"lyp-go/cron"
 	"lyp-go/logger"
 	"lyp-go/middleware"
 	"lyp-go/router"
@@ -27,4 +28,7 @@ func init() {
 	middleware.LoadMidde(app)
 	// 注册路由
 	router.InitRouter(app)
+	// 初始化定时任务
+	c := cron.Init()
+	defer c.Stop()
 }
