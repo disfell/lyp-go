@@ -9,6 +9,11 @@ import (
 	"net/url"
 )
 
+// SupaDelete 删除远端数据
+//
+//	参数:
+//	- table: 数据表名
+//	- cond: 删除的条件, example: key=name, value=eq.小二
 func SupaDelete(table string, cond *map[string]string) map[string]interface{} {
 	supabaseUrl := viper.GetString("supabase.url") + "/rest/v1/" + table
 	headers := map[string]string{
