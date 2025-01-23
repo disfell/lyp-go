@@ -9,6 +9,22 @@ import (
 	"net/url"
 )
 
+func SupaGet(table string, cond *map[string]string) []map[string]interface{} {
+	supabaseUrl := viper.GetString("supabase.url") + "/rest/v1/" + table
+	headers := map[string]string{
+		"apikey":        viper.GetString("supabase.key"),
+		"Authorization": "Bearer " + viper.GetString("supabase.key"),
+		"Range":         "0-9",
+	}
+	params := &url.Values{}
+	if cond != nil {
+		for key, value := range *cond {
+			params.Add(key, value)
+		}
+	}
+	return http2.Get[[]map[string]interface{}](supabaseUrl, params, headers)
+}
+
 // SupaDelete 删除远端数据
 //
 //	参数:
@@ -27,7 +43,7 @@ func SupaDelete(table string, cond *map[string]string) map[string]interface{} {
 		}
 	}
 
-	ret := http2.DeleteMap(supabaseUrl, params, nil, headers)
+	ret := http2.Delete[map[string]interface{}](supabaseUrl, params, nil, headers)
 	logger.Debugf("del data resp: %v", ret)
 
 	if nil != ret["code"] {
@@ -43,7 +59,7 @@ func SupaInsert(table string, data *[]map[string]interface{}) map[string]interfa
 		"apikey":        viper.GetString("supabase.key"),
 		"Authorization": "Bearer " + viper.GetString("supabase.key"),
 	}
-	ret := http2.PostMap(supabaseUrl, nil, data, headers)
+	ret := http2.Post[map[string]interface{}](supabaseUrl, nil, data, headers)
 
 	logger.Debugf("insert data resp: %v", ret)
 

@@ -9,7 +9,7 @@ import (
 	"net/url"
 )
 
-func GetMap(url string, params *url.Values, headers map[string]string) map[string]interface{} {
+func Get[T any](url string, params *url.Values, headers map[string]string) T {
 	recentUrl := url
 	if params != nil && len(params.Encode()) > 0 {
 		recentUrl = url + "?" + params.Encode()
@@ -41,19 +41,10 @@ func GetMap(url string, params *url.Values, headers map[string]string) map[strin
 	}(resp.Body)
 	body, err := io.ReadAll(resp.Body)
 
-	if "" == string(body) {
-		return make(map[string]interface{})
-	}
-
-	var jsonMap map[string]interface{}
-	err = json.Unmarshal(body, &jsonMap)
-	if err != nil {
-		panic(err.Error())
-	}
-	return jsonMap
+	return retT[T](body)
 }
 
-func PostMap(url string, params *url.Values, requestBody interface{}, headers map[string]string) map[string]interface{} {
+func Post[T any](url string, params *url.Values, requestBody interface{}, headers map[string]string) T {
 	recentUrl := url
 	// 将请求参数附加到URL
 	if params != nil {
@@ -107,20 +98,10 @@ func PostMap(url string, params *url.Values, requestBody interface{}, headers ma
 	if err != nil {
 		panic(err.Error())
 	}
-
-	if "" == string(respBody) {
-		return make(map[string]interface{})
-	}
-
-	var jsonMap map[string]interface{}
-	err = json.Unmarshal(respBody, &jsonMap)
-	if err != nil {
-		panic(err.Error())
-	}
-	return jsonMap
+	return retT[T](respBody)
 }
 
-func DeleteMap(url string, params *url.Values, requestBody interface{}, headers map[string]string) map[string]interface{} {
+func Delete[T any](url string, params *url.Values, requestBody interface{}, headers map[string]string) T {
 	recentUrl := url
 	// 将请求参数附加到URL
 	if params != nil {
@@ -174,15 +155,20 @@ func DeleteMap(url string, params *url.Values, requestBody interface{}, headers 
 	if err != nil {
 		panic(err.Error())
 	}
+	return retT[T](respBody)
+}
 
-	if "" == string(respBody) {
-		return make(map[string]interface{})
+func retT[T any](data []byte) T {
+	var empty T
+	if "" == string(data) {
+		return empty
 	}
+	logger.Debugf("get data resp: %v", string(data))
 
-	var jsonMap map[string]interface{}
-	err = json.Unmarshal(respBody, &jsonMap)
+	var ret T
+	err := json.Unmarshal(data, &ret)
 	if err != nil {
 		panic(err.Error())
 	}
-	return jsonMap
+	return ret
 }

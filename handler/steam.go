@@ -15,12 +15,28 @@ import (
 )
 
 func SteamHandler(c *gin.Context) {
+	// 先查原有的数据
+	data := client.SupaGet("games", &map[string]string{"select": "*"})
+	location, _ := time.LoadLocation("Asia/Shanghai")
+	chinaTime := time.Now().In(location)
+
+	if data != nil && len(data) > 0 {
+		createdAtStr := data[0]["created_at"].(string)
+		parsedTime, _ := time.Parse(time.RFC3339, createdAtStr)
+
+		diff := chinaTime.Sub(parsedTime)
+		if diff.Hours() < 24 {
+			c.JSON(http.StatusOK, output.Suc("", data))
+			return
+		}
+	}
+
 	// 创建查询参数
 	params := &url.Values{}
 	params.Add("key", viper.GetString("steam.token"))
 	params.Add("steamid", viper.GetString("steam.id"))
 	recentUrl := viper.GetString("steam.recentUrl")
-	steamRet := http2.GetMap(recentUrl, params, nil)
+	steamRet := http2.Get[map[string]interface{}](recentUrl, params, nil)
 
 	games := steamRet["response"].(map[string]interface{})["games"].([]interface{})
 
@@ -54,6 +70,6 @@ func SteamStatus(c *gin.Context) {
 	params.Add("key", viper.GetString("steam.token"))
 	params.Add("steamids", viper.GetString("steam.id"))
 	recentUrl := viper.GetString("steam.userStatus")
-	steamRet := http2.GetMap(recentUrl, params, nil)
+	steamRet := http2.Get[map[string]interface{}](recentUrl, params, nil)
 	c.JSON(http.StatusOK, output.Suc("", steamRet))
 }

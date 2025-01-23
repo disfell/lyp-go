@@ -7,6 +7,7 @@ import (
 	"lyp-go/middleware"
 	"lyp-go/router"
 	"net/http"
+	"time"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -18,6 +19,9 @@ var (
 )
 
 func init() {
+	// 设置中国时区
+	_, _ = time.LoadLocation("Asia/Shanghai")
+	// 生产模式
 	gin.SetMode(gin.ReleaseMode)
 	config.Take()
 	// 确保所有日志都写入
