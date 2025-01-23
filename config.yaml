@@ -1,9 +1,9 @@
 supabase:
-  url: https://wbyxltcwssusdaywispe.supabase.co
-  annokey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndieXhsdGN3c3N1c2RheXdpc3BlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTc3MjU0NzcsImV4cCI6MjAzMzMwMTQ3N30.k3wZYezUISBhadwguP978NCqfSMFmKhscrTYQ_nFcDE
-  key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndieXhsdGN3c3N1c2RheXdpc3BlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcxNzcyNTQ3NywiZXhwIjoyMDMzMzAxNDc3fQ.-eMYgsyomyralCftLprDOzV89B-pRaqNGY595opqq1Y
+  url:
+  annokey:
+  key:
 steam:
-  id: 76561199109983986
-  token: F2FB2E28329F2E5A123AB2C2564E4C64
-  recentUrl: https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1
-  userStatus: https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/
+  id:
+  token:
+  recentUrl:
+  userStatus:
