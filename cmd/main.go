@@ -7,15 +7,13 @@ import (
 	"lyp-go/middleware"
 	"lyp-go/router"
 	"net/http"
-	"time"
 )
 
 var (
 	app *gin.Engine
 )
 
-func main() { // 设置中国时区
-	_, _ = time.LoadLocation("Asia/Shanghai")
+func main() {
 	config.Take()
 	// 确保所有日志都写入
 	defer logger.Sync()
