@@ -14,7 +14,7 @@ func InitRouter(c *gin.Engine) {
 
 		api.GET("/github/trending", handler.GitHubTrendingHandler)
 
-		api.GET("/notion/qrytable", handler.NotionDatabaseQryHandler)
+		api.POST("/notion/qryDatabase", handler.NotionDatabaseQryHandler)
 	}
 
 	proxy := c.Group("/proxy")

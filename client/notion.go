@@ -3,7 +3,8 @@ package client
 import (
 	"github.com/spf13/viper"
 	"lyp-go/lhttp"
-	"lyp-go/logger"
+	"lyp-go/model"
+	"lyp-go/output"
 	"strings"
 )
 
@@ -12,14 +13,13 @@ func NotionHeader() map[string]string {
 	return map[string]string{"Authorization": "Bearer " + token, "Content-Type": "application/json", "Notion-Version": "2022-06-28"}
 }
 
-func NotionTable() []map[string]interface{} {
+func NotionDatabaseQry(databaseId string, reqBody map[string]interface{}) []map[string]interface{} {
 	api := viper.GetString("notion.api")
-	database := viper.GetString("notion.database.qry")
-	databaseId := viper.GetString("notion.database.blogCollection")
-	database = strings.Replace(database, "${database_id}", databaseId, -1)
+	qryUrl := viper.GetString("notion.database.qry")
+	database := strings.Replace(qryUrl, "${database_id}", databaseId, -1)
 	url := api + database
-	resp := lhttp.Post[map[string]interface{}](url, nil, nil, NotionHeader())
-	logger.Debugf("Notion response: %v", resp)
+
+	resp := lhttp.Post[map[string]interface{}](url, nil, reqBody, NotionHeader())
 
 	NotionRespCheck(resp)
 
@@ -40,9 +40,9 @@ func NotionTable() []map[string]interface{} {
 }
 
 func NotionRespCheck(respBody map[string]interface{}) {
-	//if "0" == respBody["code"] {
-	//	return
-	//}
-	//
-	//panic(output.Err(model.ErrorCode, respBody["msg"].(string), respBody))
+	if "error" != respBody["object"] {
+		return
+	}
+
+	panic(output.Err(model.ErrorCode, respBody["message"].(string), respBody))
 }

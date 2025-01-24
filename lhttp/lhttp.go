@@ -51,6 +51,9 @@ func Post[T any](url string, params *url.Values, requestBody interface{}, header
 		recentUrl = recentUrl + "?" + params.Encode()
 	}
 
+	logger.Debugf("req url: %v", recentUrl)
+	logger.Debugf("req body: %v", requestBody)
+	logger.Debugf("req headers: %v", headers)
 	// 将请求体编码为JSON
 	var body io.Reader
 	if requestBody != nil {
@@ -80,7 +83,6 @@ func Post[T any](url string, params *url.Values, requestBody interface{}, header
 
 	// 发送请求
 	client := &http.Client{}
-	logger.Debugf("post url: %s, header: %s, body: %s", recentUrl, headers, body)
 	resp, err := client.Do(req)
 
 	if err != nil {
