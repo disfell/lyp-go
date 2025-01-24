@@ -1,4 +1,4 @@
-package http
+package lhttp
 
 import (
 	"bytes"
@@ -27,7 +27,7 @@ func Get[T any](url string, params *url.Values, headers map[string]string) T {
 
 	// 发送请求
 	client := &http.Client{}
-	logger.Debugf("post url: %s, header: %s", recentUrl, headers)
+	logger.Debugf("get url: %s, header: %s", recentUrl, headers)
 	resp, err := client.Do(req)
 	if err != nil {
 		panic(err.Error())

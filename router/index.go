@@ -13,6 +13,8 @@ func InitRouter(c *gin.Engine) {
 		api.GET("/steam/status", handler.SteamStatus)
 
 		api.GET("/github/trending", handler.GitHubTrendingHandler)
+
+		api.GET("/notion/qrytable", handler.NotionDatabaseQryHandler)
 	}
 
 	proxy := c.Group("/proxy")

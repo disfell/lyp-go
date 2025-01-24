@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"lyp-go/client"
-	http2 "lyp-go/http"
+	"lyp-go/lhttp"
 	"lyp-go/logger"
 	"lyp-go/model"
 	"lyp-go/output"
@@ -36,7 +36,7 @@ func SteamHandler(c *gin.Context) {
 	params.Add("key", viper.GetString("steam.token"))
 	params.Add("steamid", viper.GetString("steam.id"))
 	recentUrl := viper.GetString("steam.recentUrl")
-	steamRet := http2.Get[map[string]interface{}](recentUrl, params, nil)
+	steamRet := lhttp.Get[map[string]interface{}](recentUrl, params, nil)
 
 	games := steamRet["response"].(map[string]interface{})["games"].([]interface{})
 
@@ -70,6 +70,6 @@ func SteamStatus(c *gin.Context) {
 	params.Add("key", viper.GetString("steam.token"))
 	params.Add("steamids", viper.GetString("steam.id"))
 	recentUrl := viper.GetString("steam.userStatus")
-	steamRet := http2.Get[map[string]interface{}](recentUrl, params, nil)
+	steamRet := lhttp.Get[map[string]interface{}](recentUrl, params, nil)
 	c.JSON(http.StatusOK, output.Suc("", steamRet))
 }
