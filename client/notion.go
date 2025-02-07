@@ -29,11 +29,17 @@ func NotionDatabaseQry(databaseId string, reqBody map[string]interface{}) []map[
 	for _, item := range results {
 		properties := item.(map[string]interface{})["properties"].(map[string]interface{})
 		url := properties["url"].(map[string]interface{})["url"].(string)
-		name := properties["名称"].(map[string]interface{})["title"].([]interface{})[0].(map[string]interface{})["plain_text"].(string)
+		name := properties["name"].(map[string]interface{})["title"].([]interface{})[0].(map[string]interface{})["plain_text"].(string)
+		tagCollect := properties["tags"].(map[string]interface{})["multi_select"].([]interface{})
+		var tags []string
+		for _, tag := range tagCollect {
+			tags = append(tags, tag.(map[string]interface{})["name"].(string))
+		}
 
 		list = append(list, map[string]interface{}{
 			"url":  url,
 			"name": name,
+			"tags": tags,
 		})
 	}
 	return list
