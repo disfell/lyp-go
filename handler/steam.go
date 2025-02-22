@@ -25,7 +25,7 @@ func SteamHandler(c *gin.Context) {
 		parsedTime, _ := time.Parse(time.RFC3339, createdAtStr)
 
 		diff := chinaTime.Sub(parsedTime)
-		if diff.Hours() < 24 {
+		if diff.Hours() < 1 {
 			c.JSON(http.StatusOK, output.Suc("", data))
 			return
 		}
@@ -60,6 +60,8 @@ func SteamHandler(c *gin.Context) {
 		client.SupaDelete("games", &map[string]string{"id": "gt.0"})
 		client.SupaInsert("games", &collection)
 	}
+
+	logger.Debugf("steam build collection: %v", collection)
 
 	c.JSON(http.StatusOK, output.Suc("", collection))
 }
