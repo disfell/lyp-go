@@ -1,0 +1,50 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "基于 Gin 的 Swagger 接口文档示例",
+        "title": "Gin Swagger 示例 API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8180",
+    "basePath": "/",
+    "paths": {
+        "/api/public/github/trending": {
+            "get": {
+                "description": "根据代理获取页面信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "代理"
+                ],
+                "summary": "获取 GitHub 热门榜单",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/output.LResp"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "output.LResp": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {},
+                "msg": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

@@ -12,7 +12,17 @@ import (
 	"strings"
 )
 
-func GitHubTrendingHandler(c *gin.Context) {
+type GitHUbController struct{}
+
+// GitHubTrendingHandler 获取用户信息
+// @Summary      获取 GitHub 热门榜单
+// @Description  根据代理获取页面信息
+// @Tags         代理
+// @Accept       json
+// @Produce      json
+// @Success 200 {object} output.LResp
+// @Router       /api/public/github/trending [get]
+func (mc *GitHUbController) GitHubTrendingHandler(c *gin.Context) {
 
 	url := "https://api.lyp.ink/proxy/github.com"
 

@@ -6,6 +6,8 @@ import (
 	"net/http"
 )
 
-func NotFoundHandler(c *gin.Context) {
+type ErrController struct{}
+
+func (ec *ErrController) NotFoundHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, output.Suc("404", nil))
 }

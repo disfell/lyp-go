@@ -1,0 +1,33 @@
+basePath: /
+definitions:
+  output.LResp:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+host: localhost:8180
+info:
+  contact: {}
+  description: 基于 Gin 的 Swagger 接口文档示例
+  title: Gin Swagger 示例 API
+  version: "1.0"
+paths:
+  /api/public/github/trending:
+    get:
+      consumes:
+      - application/json
+      description: 根据代理获取页面信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/output.LResp'
+      summary: 获取 GitHub 热门榜单
+      tags:
+      - 代理
+swagger: "2.0"

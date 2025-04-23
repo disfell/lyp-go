@@ -8,8 +8,10 @@ import (
 	"net/http"
 )
 
+type NotionController struct{}
+
 // NotionDatabaseQryHandler notion api docs: https://developers.notion.com/reference/intro
-func NotionDatabaseQryHandler(c *gin.Context) {
+func (nc *NotionController) NotionDatabaseQryHandler(c *gin.Context) {
 	databaseId := c.Query("databaseId")
 	filterProperties := c.Query("filter_properties")
 

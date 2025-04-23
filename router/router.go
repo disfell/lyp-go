@@ -2,25 +2,36 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	_ "lyp-go/docs" // 导入生成的 docs 包
 	"lyp-go/handler"
 )
 
 func InitRouter(c *gin.Engine) {
+
+	steamCont := handler.SteamController{}
+	githubCont := handler.GitHUbController{}
+	notionCont := handler.NotionController{}
+	proxyCont := handler.ProxyController{}
+	errCont := handler.ErrController{}
+
+	// 注册 Swagger 路由
+	c.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	// 可公开的路由
 	api := c.Group("/api").Group("/public")
 	{
-		api.POST("/steam/games", handler.SteamHandler)
-		api.GET("/steam/status", handler.SteamStatus)
-
-		api.GET("/github/trending", handler.GitHubTrendingHandler)
-
-		api.POST("/notion/qryDatabase", handler.NotionDatabaseQryHandler)
+		api.POST("/steam/games", steamCont.SteamHandler)
+		api.GET("/steam/status", steamCont.SteamStatus)
+		api.GET("/github/trending", githubCont.GitHubTrendingHandler)
+		api.POST("/notion/qryDatabase", notionCont.NotionDatabaseQryHandler)
 	}
 
 	proxy := c.Group("/proxy")
 	{
-		proxy.Any("/*target", handler.UrlProxyHandler)
+		proxy.Any("/*target", proxyCont.UrlProxyHandler)
 	}
 
-	c.NoRoute(handler.NotFoundHandler)
+	c.NoRoute(errCont.NotFoundHandler)
 }

@@ -12,8 +12,8 @@ const (
 	TimeFormatDateTimeUs = "2006-01-02 15:04:05.000000"    // 含微秒
 	TimeFormatDateTimeNs = "2006-01-02 15:04:05.000000000" // 含纳秒
 
-	TimeFormatDateTimeTZ         = "2006-01-02 15:04:05 MST"   // 带时区缩写
-	TimeFormatISOWithTZ          = "2006-01-02T15:04:05-07:00" // ISO 8601 带时区偏移
-	TimeFormatISO860_UTC_WITH_MS = "2006-01-02T15:04:05.000Z"
-	TimeFormatCompactDateTime    = "20060102_150405" // 紧凑格式（如 20250313_1420）
+	TimeFormatDateTimeTZ      = "2006-01-02 15:04:05 MST"   // 带时区缩写
+	TimeFormatISOWithTZ       = "2006-01-02T15:04:05-07:00" // ISO 8601 带时区偏移
+	TimeFormatISO860UTCWithMs = "2006-01-02T15:04:05.000Z"
+	TimeFormatCompactDateTime = "20060102_150405" // 紧凑格式（如 20250313_1420）
 )

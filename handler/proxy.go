@@ -10,7 +10,9 @@ import (
 	"strings"
 )
 
-func UrlProxyHandler(c *gin.Context) {
+type ProxyController struct{}
+
+func (pc *ProxyController) UrlProxyHandler(c *gin.Context) {
 	// 获取目标路径（如 /proxy/github.com -> github.com）
 	targetPath := strings.TrimPrefix(c.Param("target"), "/")
 	if targetPath == "" {

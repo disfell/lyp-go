@@ -93,7 +93,7 @@ func notionRespCheck(respBody map[string]interface{}) {
 }
 
 func getDateTime(key string, item map[string]interface{}) time.Time {
-	t, err := time.Parse(model.TimeFormatISO860_UTC_WITH_MS, item[key].(string))
+	t, err := time.Parse(model.TimeFormatISO860UTCWithMs, item[key].(string))
 	if err != nil {
 		panic(err)
 	}

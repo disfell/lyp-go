@@ -14,7 +14,9 @@ import (
 	"time"
 )
 
-func SteamHandler(c *gin.Context) {
+type SteamController struct{}
+
+func (sc *SteamController) SteamHandler(c *gin.Context) {
 	// 先查原有的数据
 	data := client.SupaGet("games", &map[string]string{"select": "*"})
 	location, _ := time.LoadLocation("Asia/Shanghai")
@@ -66,7 +68,7 @@ func SteamHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, output.Suc("", collection))
 }
 
-func SteamStatus(c *gin.Context) {
+func (sc *SteamController) SteamStatus(c *gin.Context) {
 	// 创建查询参数
 	params := &url.Values{}
 	params.Add("key", viper.GetString("steam.token"))

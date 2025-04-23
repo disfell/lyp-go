@@ -83,19 +83,3 @@ func customRecovery() gin.HandlerFunc {
 		}
 	}
 }
-
-func Cache1day() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// 设置 Cache-Control 头，使浏览器缓存该响应 1 天
-		c.Writer.Header().Set("Cache-Control", "public, max-age=86400")
-		c.Next()
-	}
-}
-
-func Cache1min() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// 设置 Cache-Control 头，使浏览器缓存该响应 1 天
-		c.Writer.Header().Set("Cache-Control", "public, max-age=60")
-		c.Next()
-	}
-}
