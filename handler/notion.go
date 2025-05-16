@@ -2,9 +2,9 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"lyp-go/client"
 	"lyp-go/model"
 	"lyp-go/output"
+	"lyp-go/service"
 	"net/http"
 )
 
@@ -21,5 +21,6 @@ func (nc *NotionController) NotionDatabaseQryHandler(c *gin.Context) {
 		c.JSON(http.StatusOK, output.Err(model.ErrorCode, err.Error(), err))
 		return
 	}
-	c.JSON(http.StatusOK, output.Suc("", client.NotionDatabaseQry(databaseId, filterProperties, reqBody)))
+	serv := service.NotionServ{}
+	c.JSON(http.StatusOK, output.Suc("", serv.NotionDatabaseQry(databaseId, filterProperties, reqBody)))
 }

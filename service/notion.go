@@ -1,4 +1,4 @@
-package client
+package service
 
 import (
 	"github.com/spf13/viper"
@@ -10,12 +10,10 @@ import (
 	"time"
 )
 
-func NotionHeader() map[string]string {
-	token := viper.GetString("notion.token")
-	return map[string]string{"Authorization": "Bearer " + token, "Content-Type": "application/json", "Notion-Version": "2022-06-28"}
+type NotionServ struct {
 }
 
-func NotionDatabaseQry(databaseId string, filterProperties string, reqBody map[string]interface{}) any {
+func (nc *NotionServ) NotionDatabaseQry(databaseId string, filterProperties string, reqBody map[string]interface{}) any {
 	api := viper.GetString("notion.api")
 	qryUrl := viper.GetString("notion.database.qry")
 	database := strings.Replace(qryUrl, "${database_id}", databaseId, -1)
@@ -25,7 +23,7 @@ func NotionDatabaseQry(databaseId string, filterProperties string, reqBody map[s
 	if filterProperties != "" {
 		params.Add("filter_properties", filterProperties)
 	}
-	resp := lhttp.Post[map[string]interface{}](databaseUrl, params, reqBody, NotionHeader())
+	resp := lhttp.Post[map[string]interface{}](databaseUrl, params, reqBody, notionHeader())
 
 	notionRespCheck(resp)
 
@@ -40,6 +38,11 @@ func NotionDatabaseQry(databaseId string, filterProperties string, reqBody map[s
 	} else {
 		panic(output.Err(model.ErrorCode, "未适配的数据格式", resp["object"]))
 	}
+}
+
+func notionHeader() map[string]string {
+	token := viper.GetString("notion.token")
+	return map[string]string{"Authorization": "Bearer " + token, "Content-Type": "application/json", "Notion-Version": "2022-06-28"}
 }
 
 func seekList(objs []interface{}) interface{} {

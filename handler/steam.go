@@ -3,11 +3,11 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
-	"lyp-go/client"
 	"lyp-go/lhttp"
 	"lyp-go/logger"
 	"lyp-go/model"
 	"lyp-go/output"
+	"lyp-go/service"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -18,7 +18,7 @@ type SteamController struct{}
 
 func (sc *SteamController) SteamHandler(c *gin.Context) {
 	// 先查原有的数据
-	data := client.SupaGet("games", &map[string]string{"select": "*"})
+	data := service.SupaGet("games", &map[string]string{"select": "*"})
 	location, _ := time.LoadLocation("Asia/Shanghai")
 	chinaTime := time.Now().In(location)
 
@@ -59,8 +59,8 @@ func (sc *SteamController) SteamHandler(c *gin.Context) {
 				"created_at": time.Now(),
 			})
 		}
-		client.SupaDelete("games", &map[string]string{"id": "gt.0"})
-		client.SupaInsert("games", &collection)
+		service.SupaDelete("games", &map[string]string{"id": "gt.0"})
+		service.SupaInsert("games", &collection)
 	}
 
 	logger.Debugf("steam build collection: %v", collection)

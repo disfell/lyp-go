@@ -15,6 +15,7 @@ func InitRouter(c *gin.Engine) {
 	notionCont := handler.NotionController{}
 	proxyCont := handler.ProxyController{}
 	errCont := handler.ErrController{}
+	dtCont := handler.DateTimeController{}
 
 	// 注册 Swagger 路由
 	c.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -26,6 +27,7 @@ func InitRouter(c *gin.Engine) {
 		api.GET("/steam/status", steamCont.SteamStatus)
 		api.GET("/github/trending", githubCont.GitHubTrendingHandler)
 		api.POST("/notion/qryDatabase", notionCont.NotionDatabaseQryHandler)
+		api.GET("/datetime/calculateDateDiff", dtCont.CalculateDateDiff)
 	}
 
 	proxy := c.Group("/proxy")
